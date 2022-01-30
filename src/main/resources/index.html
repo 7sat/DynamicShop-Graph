@@ -116,9 +116,6 @@
       });
 
       function createChart() {
-        Highcharts.setOptions({
-          colors: ['#dd2c00', '#ff6d00', '#ffab00']
-        });
 
         var gHeight = window.innerHeight - $('header').height() - $('footer').height() - 200;
         if (gHeight < 400) {
@@ -145,8 +142,25 @@
             dataRefreshRate: 10
           },
 
+		  yAxis: [{
+			opposite: false,
+			labels: {
+              enabled: false
+            }
+			}, {
+			opposite: true,
+			labels: {
+              enabled: true
+            }
+			}, {
+			opposite: false,
+			labels: {
+              enabled: true
+            }
+			}],
+
           legend: {
-            enabled: true
+            enabled: false
           },
 
           xAxis: {
@@ -172,13 +186,15 @@
             valueDecimals: 2,
             split: true
           },
+
+		  series: [{yAxis:0, visible: false}, {yAxis:1}, {yAxis:2}]
         }
 
         chart = new Highcharts.stockChart(chartOptions);
       }
 
       createChart();
-    });
+    })
   </script>
 
 </body>
