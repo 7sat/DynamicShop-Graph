@@ -6,7 +6,7 @@
 
     <groupId>xyz.jpenilla</groupId>
     <artifactId>DynamicShop-Graph</artifactId>
-    <version>0.2.3-SNAPSHOT.{BUILD_NUMBER}</version>
+    <version>0.2.4-custom</version>
     <packaging>jar</packaging>
 
     <name>DynamicShop Graph</name>
@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -76,10 +76,6 @@
                                 <relocation>
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>xyz.jpenilla.dsgraph.lib.bstats</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>xyz.jpenilla.jmplib</pattern>
-                                    <shadedPattern>xyz.jpenilla.dsgraph.lib.jmplib</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -173,12 +169,6 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>xyz.jpenilla</groupId>
-            <artifactId>jmplib</artifactId>
-            <version>1.0.0-SNAPSHOT.47</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
