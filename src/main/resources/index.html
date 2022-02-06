@@ -2,13 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
     <title>DynamicShop-Graph</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css"
-          rel="stylesheet" media="screen,projection" />
+          rel="stylesheet" media="screen,projection"/>
     <style>
     body {
       display: flex;
@@ -19,7 +19,8 @@
     main {
       flex: 1 0 auto;
     }
-  </style>
+
+    </style>
 </head>
 
 <body>
@@ -117,6 +118,16 @@
 
       function createChart() {
 
+		Highcharts.setOptions({
+          colors: ['#dd2c00', '#00ff40', '#005eff'],
+		//lang: { // https://api.highcharts.com/highcharts/lang
+        //           months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        //           weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+        //           shortMonths: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+		//	   },
+			numericSymbolMagnitude: 1000 // Use 10000 for Japanese, Korean and various Chinese locales
+        });
+
         var gHeight = window.innerHeight - $('header').height() - $('footer').height() - 200;
         if (gHeight < 400) {
           gHeight = 400;
@@ -129,8 +140,36 @@
           },
 
           rangeSelector: {
-            selected: 4
-          },
+            allButtonsEnabled: true,
+            buttons: [{
+                type: 'day',
+                count: 1,
+                text: 'Today',
+                dataGrouping: {
+                    forced: false,
+                    units: [['minute', [15]]]
+                }
+            }, {
+                type: 'week',
+                count: 1,
+                text: 'This week',
+                dataGrouping: {
+                    forced: true,
+                    units: [['hour', [1]]]
+                }
+            }, {
+                type: 'all',
+                text: 'All',
+                dataGrouping: {
+                    forced: true,
+                    units: [['hour', [1]]]
+                }
+            }],
+            buttonTheme: {
+                width: 60
+            },
+            selected: 1
+        },
 
           title: {
             text: dataFile
@@ -148,19 +187,21 @@
               enabled: false
             }
 			}, {
-			opposite: true,
+			opposite: false,
 			labels: {
-              enabled: true
+              enabled: true,
+			  format: '{value}'
             }
 			}, {
 			opposite: false,
 			labels: {
-              enabled: true
+              enabled: true,
+              format: '{value}'
             }
 			}],
 
           legend: {
-            enabled: false
+            enabled: true
           },
 
           xAxis: {
@@ -177,8 +218,21 @@
 
           plotOptions: {
             series: {
-              showInNavigator: true
-            }
+              showInNavigator: true,
+			  events: {
+                    legendItemClick: function () {
+                        let series = this.chart.series,
+                                i = series.length,
+                                otherSeries;
+                            while(i--) {
+                                otherSeries = series[i]
+                                if (otherSeries != this && otherSeries.visible) {
+                                    otherSeries.hide();
+                                }
+                            }
+                    }
+                }
+            },
           },
 
           tooltip: {
@@ -187,15 +241,17 @@
             split: true
           },
 
-		  series: [{yAxis:0, visible: false}, {yAxis:1}, {yAxis:2}]
+		  series: [{yAxis:0, visible: false, showInLegend: false}, {yAxis:1, visible: false}, {yAxis:2}]
         }
 
         chart = new Highcharts.stockChart(chartOptions);
       }
 
       createChart();
+
     })
-  </script>
+
+</script>
 
 </body>
 
