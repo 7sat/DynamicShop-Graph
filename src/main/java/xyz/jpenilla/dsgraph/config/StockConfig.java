@@ -77,7 +77,8 @@ public class StockConfig {
                 String lastLine = new ReversedLinesFileReader(file, Charset.defaultCharset()).readLine();
                 lastEntry = new StockEntry(lastLine);
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                return; // csv파일에 헤더밖에 없는경우 이럴 수 있음.
             }
         }
 
