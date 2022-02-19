@@ -7,9 +7,6 @@ files:
   Diamond:
     shopName: Ore
     material: DIAMOND
-  Gold:
-    shopName: Ore
-    material: GOLD_INGOT
   Iron:
     shopName: Ore
     material: IRON_INGOT

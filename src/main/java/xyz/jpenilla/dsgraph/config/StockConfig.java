@@ -75,7 +75,8 @@ public class StockConfig {
         } else {
             try {
                 String lastLine = new ReversedLinesFileReader(file, Charset.defaultCharset()).readLine();
-                lastEntry = new StockEntry(lastLine);
+                if(!lastLine.contains("Time"))// 헤더를 무시하기 위한 무식한 해결책.
+                    lastEntry = new StockEntry(lastLine);
             } catch (IOException e) {
                 //e.printStackTrace();
                 return; // csv파일에 헤더밖에 없는경우 이럴 수 있음.
