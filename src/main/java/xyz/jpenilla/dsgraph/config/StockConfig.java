@@ -2,6 +2,7 @@ package xyz.jpenilla.dsgraph.config;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import org.bukkit.inventory.meta.ItemMeta;
 import xyz.jpenilla.dsgraph.DSGraph;
 import xyz.jpenilla.dsgraph.StockEntry;
 import lombok.Getter;
@@ -25,14 +26,17 @@ public class StockConfig {
     @Getter
     private final Material material;
     @Getter
+    private final ItemMeta itemMeta;
+    @Getter
     private final String shopName;
     @Getter
     private final String path;
     public static final String folderPath = DSGraph.getInstance().getDataFolder() + "/web/data/";
 
-    public StockConfig(String shopName, String name, Material material) {
+    public StockConfig(String shopName, String name, Material material, ItemMeta itemMeta) {
         this.name = name;
         this.material = material;
+        this.itemMeta = itemMeta;
         this.shopName = shopName;
         this.path = folderPath + name + ".csv";
     }
@@ -83,7 +87,10 @@ public class StockConfig {
             }
         }
 
-        StockEntry newEntry = new StockEntry(shopName, new ItemStack(material));
+        ItemStack is = new ItemStack(material);
+        is.setItemMeta(itemMeta);
+
+        StockEntry newEntry = new StockEntry(shopName, is);
         if (!newEntry.equals(lastEntry) || DSGraph.getInstance().getCfg().isSaveUnchangedData()) {
             try {
                 CSVWriter writer = new CSVWriter(new FileWriter(path, true));

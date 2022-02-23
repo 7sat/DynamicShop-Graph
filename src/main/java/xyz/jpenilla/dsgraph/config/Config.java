@@ -1,5 +1,6 @@
 package xyz.jpenilla.dsgraph.config;
 
+import org.bukkit.inventory.meta.ItemMeta;
 import xyz.jpenilla.dsgraph.DSGraph;
 import lombok.Getter;
 import lombok.experimental.FieldNameConstants;
@@ -40,8 +41,9 @@ public class Config {
         config.getConfigurationSection(Fields.files).getKeys(false).forEach(key -> {
             String shopName = config.getString(Fields.files + "." + key + "." + StockConfig.Fields.shopName);
             Material material = Material.getMaterial(config.getString(Fields.files + "." + key + "." + StockConfig.Fields.material));
+            ItemMeta itemMeta = (ItemMeta) config.get(Fields.files + "." + key + ".itemStack");
             if (material != null) {
-                files.add(new StockConfig(shopName, key, material));
+                files.add(new StockConfig(shopName, key, material, itemMeta));
             }
         });
 

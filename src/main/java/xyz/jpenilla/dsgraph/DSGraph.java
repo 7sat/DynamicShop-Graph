@@ -1,6 +1,7 @@
 package xyz.jpenilla.dsgraph;
 
 import co.aikar.commands.PaperCommandManager;
+import org.bukkit.command.ConsoleCommandSender;
 import xyz.jpenilla.dsgraph.command.CommandDSGraph;
 import xyz.jpenilla.dsgraph.command.CommandHelper;
 import xyz.jpenilla.dsgraph.config.Config;
@@ -22,6 +23,8 @@ public final class DSGraph extends JavaPlugin {
     @Setter
     private PaperCommandManager commandManager;
 
+    public static ConsoleCommandSender console;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -40,6 +43,8 @@ public final class DSGraph extends JavaPlugin {
         int pluginId = 7828;
         Metrics metrics = new Metrics(this, pluginId);
         metrics.addCustomChart(new Metrics.SimplePie("amount_of_items_tracked", () -> String.valueOf(cfg.getFiles().size())));
+
+        console = getServer().getConsoleSender();
     }
 
     @Override
