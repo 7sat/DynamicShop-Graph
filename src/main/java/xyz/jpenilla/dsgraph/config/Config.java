@@ -20,6 +20,8 @@ public class Config {
     @Getter
     private int deleteAfterDays;
     @Getter
+    private int compressAfterHours;
+    @Getter
     private int port;
     @Getter
     private boolean webServer;
@@ -49,6 +51,7 @@ public class Config {
 
         saveUnchangedData = config.getBoolean(Fields.saveUnchangedData);
         deleteAfterDays = config.getInt(Fields.deleteAfterDays);
+        compressAfterHours = config.getInt(Fields.compressAfterHours);
         port = config.getInt(Fields.port);
         webServer = config.getBoolean(Fields.webServer);
         customHTML = config.getBoolean(Fields.customHTML);

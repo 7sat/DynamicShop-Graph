@@ -85,7 +85,7 @@ public class TaskManager {
     public void startCleanOldDataTask() {
         stopCleanOldDataTask();
         cleanOldDataTask = new CleanOldDataTask();
-        cleanOldDataTask.runTaskTimerAsynchronously(plugin, 20L * 10L, 20L * 60L * 60L * 3L);
+        cleanOldDataTask.runTaskTimerAsynchronously(plugin, 20L * 10L, 20L * 60L * 60L); // 1시간
     }
 
     public void stopCleanOldDataTask() {

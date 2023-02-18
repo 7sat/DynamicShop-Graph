@@ -2,6 +2,7 @@ package xyz.jpenilla.dsgraph.config;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import me.sat7.dynamicshop.DynaShopAPI;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.jpenilla.dsgraph.DSGraph;
 import xyz.jpenilla.dsgraph.StockEntry;
@@ -90,6 +91,9 @@ public class StockConfig {
         ItemStack is = new ItemStack(material);
         is.setItemMeta(itemMeta);
 
+        if(!DynaShopAPI.validateShopName(shopName))
+            return;
+
         StockEntry newEntry = new StockEntry(shopName, is);
         if (!newEntry.equals(lastEntry) || DSGraph.getInstance().getCfg().isSaveUnchangedData()) {
             try {
@@ -106,17 +110,24 @@ public class StockConfig {
         }
     }
 
-    public void clean() {
-        try {
+    public void clean()
+    {
+        try
+        {
             ArrayList<String[]> al = new ArrayList<>();
             CSVReader reader2 = new CSVReader(new FileReader(path));
-            reader2.readAll().forEach(line -> {
-                if (!line[0].equals(StockEntry.Fields.Time)) {
+            reader2.readAll().forEach(line ->
+            {
+                if (!line[0].equals(StockEntry.Fields.Time))
+                {
                     StockEntry u = new StockEntry(line);
-                    if (u.getLocalDateTime().isAfter(LocalDateTime.now().minusDays(DSGraph.getInstance().getCfg().getDeleteAfterDays()))) {
+                    if (u.getLocalDateTime().isAfter(LocalDateTime.now().minusDays(DSGraph.getInstance().getCfg().getDeleteAfterDays())))
+                    {
                         al.add(u.getRecord());
                     }
-                } else {
+                }
+                else
+                {
                     al.add(StockEntry.getHeader());
                 }
             });
@@ -125,7 +136,55 @@ public class StockConfig {
             CSVWriter writer = new CSVWriter(sw);
             writer.writeAll(al);
             writer.close();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void compress()
+    {
+        try
+        {
+            ArrayList<String[]> al = new ArrayList<>();
+            CSVReader reader2 = new CSVReader(new FileReader(path));
+
+            LocalDateTime lastTime = null;
+
+            for (String[] line : reader2.readAll())
+            {
+                if (!line[0].equals(StockEntry.Fields.Time))
+                {
+                    StockEntry u = new StockEntry(line);
+
+                    if (lastTime == null)
+                        lastTime = u.getLocalDateTime();
+
+                    int trimVal = 0;
+
+                    if (u.getLocalDateTime().isBefore(LocalDateTime.now().minusHours(DSGraph.getInstance().getCfg().getCompressAfterHours())))
+                    {
+                        trimVal = 10;
+                    }
+
+                    if (trimVal == 0 || u.getLocalDateTime().isAfter(lastTime.plusMinutes(trimVal)))
+                    {
+                        al.add(u.getRecord());
+                        lastTime = u.getLocalDateTime();
+                    }
+
+                } else
+                {
+                    al.add(StockEntry.getHeader());
+                }
+            }
+
+            FileWriter sw = new FileWriter(path);
+            CSVWriter writer = new CSVWriter(sw);
+            writer.writeAll(al);
+            writer.close();
+        } catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

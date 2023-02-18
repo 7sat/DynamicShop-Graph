@@ -26,7 +26,7 @@ public class RecordDataTask extends BukkitRunnable {
                     new Gson().toJson(datas, writer);
                     writer.close();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
             }
 
